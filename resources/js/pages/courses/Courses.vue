@@ -24,7 +24,11 @@ const props = defineProps({
         default: null,
     },
     summary: {
-        type: Object as PropType<{ parents: number; courses: number; visibles: number }>,
+        type: Object as PropType<{
+            parents: number;
+            courses: number;
+            visibles: number;
+        }>,
         default: null,
     },
 });
@@ -57,13 +61,25 @@ function refreshParentCode(payload: { parent: number; course?: number }) {
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Nuevo código', { description: 'El código se ha generado nuevamente' }),
-            onError: () => toast('Error al generar código', { description: 'El código no se ha generado' }),
+            onSuccess: () =>
+                toast('Nuevo código', {
+                    description: 'El código se ha generado nuevamente',
+                }),
+            onError: () =>
+                toast('Error al generar código', {
+                    description: 'El código no se ha generado',
+                }),
         },
     );
 }
 
-function refreshCourseCode({ parent, course }: { parent: number; course: number }) {
+function refreshCourseCode({
+    parent,
+    course,
+}: {
+    parent: number;
+    course: number;
+}) {
     router.post(
         route('courses.refresh-course', { parent, course }),
         {},
@@ -71,13 +87,23 @@ function refreshCourseCode({ parent, course }: { parent: number; course: number 
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Nuevo código', { description: 'El código se ha generado nuevamente' }),
-            onError: () => toast('Error al generar código', { description: 'El código no se ha generado' }),
+            onSuccess: () =>
+                toast('Nuevo código', {
+                    description: 'El código se ha generado nuevamente',
+                }),
+            onError: () =>
+                toast('Error al generar código', {
+                    description: 'El código no se ha generado',
+                }),
         },
     );
 }
 
-function deleteCourseCode(payload: { parent: number; course: number; code: number }) {
+function deleteCourseCode(payload: {
+    parent: number;
+    course: number;
+    code: number;
+}) {
     router.post(
         route('courses.delete-course-code', payload),
         {},
@@ -85,8 +111,14 @@ function deleteCourseCode(payload: { parent: number; course: number; code: numbe
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Código eliminado', { description: 'El código se ha eliminado' }),
-            onError: () => toast('Error al eliminar código', { description: 'El código no se ha eliminado' }),
+            onSuccess: () =>
+                toast('Código eliminado', {
+                    description: 'El código se ha eliminado',
+                }),
+            onError: () =>
+                toast('Error al eliminar código', {
+                    description: 'El código no se ha eliminado',
+                }),
         },
     );
 }
@@ -99,8 +131,14 @@ function addCourseCode(payload: { parent: number; course: number }) {
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Nuevo código', { description: 'El código se ha generado nuevamente' }),
-            onError: () => toast('Error al generar código', { description: 'El código no se ha generado' }),
+            onSuccess: () =>
+                toast('Nuevo código', {
+                    description: 'El código se ha generado nuevamente',
+                }),
+            onError: () =>
+                toast('Error al generar código', {
+                    description: 'El código no se ha generado',
+                }),
         },
     );
 }
@@ -113,8 +151,14 @@ function disableCourse(payload: { parent: number; course: number }) {
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Curso deshabilitado', { description: 'El curso se ha deshabilitado' }),
-            onError: () => toast('Error al deshabilitar curso', { description: 'El curso no se ha deshabilitado' }),
+            onSuccess: () =>
+                toast('Curso deshabilitado', {
+                    description: 'El curso se ha deshabilitado',
+                }),
+            onError: () =>
+                toast('Error al deshabilitar curso', {
+                    description: 'El curso no se ha deshabilitado',
+                }),
         },
     );
 }
@@ -127,8 +171,14 @@ function enableCourse(payload: { parent: number; course: number }) {
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Curso habilitado', { description: 'El curso se ha habilitado' }),
-            onError: () => toast('Error al habilitar curso', { description: 'El curso no se ha habilitado' }),
+            onSuccess: () =>
+                toast('Curso habilitado', {
+                    description: 'El curso se ha habilitado',
+                }),
+            onError: () =>
+                toast('Error al habilitar curso', {
+                    description: 'El curso no se ha habilitado',
+                }),
         },
     );
 }
@@ -138,18 +188,27 @@ function deleteCourse(payload: { parent: number; course: number }) {
         preserveScroll: true,
         preserveState: false,
         onSuccess: () => {
-            toast('Curso eliminado', { description: 'El curso se ha eliminado' });
+            toast('Curso eliminado', {
+                description: 'El curso se ha eliminado',
+            });
             router.visit(route('courses.parent', { parent: payload.parent }), {
                 preserveScroll: true,
                 preserveState: false,
                 replace: true,
             });
         },
-        onError: () => toast('Error al eliminar curso', { description: 'El curso no se ha eliminado' }),
+        onError: () =>
+            toast('Error al eliminar curso', {
+                description: 'El curso no se ha eliminado',
+            }),
     });
 }
 
-function deleteCourseFile(payload: { parent: number; course: number; file: number }) {
+function deleteCourseFile(payload: {
+    parent: number;
+    course: number;
+    file: number;
+}) {
     router.post(
         route('courses.delete-course-file', payload),
         {},
@@ -157,48 +216,73 @@ function deleteCourseFile(payload: { parent: number; course: number; file: numbe
             preserveUrl: true,
             preserveScroll: true,
             preserveState: false,
-            onSuccess: () => toast('Archivo eliminado', { description: 'El archivo se ha eliminado' }),
-            onError: () => toast('Error al eliminar archivo', { description: 'El archivo no se ha eliminado' }),
+            onSuccess: () =>
+                toast('Archivo eliminado', {
+                    description: 'El archivo se ha eliminado',
+                }),
+            onError: () =>
+                toast('Error al eliminar archivo', {
+                    description: 'El archivo no se ha eliminado',
+                }),
         },
     );
 }
 
 function addCourseFile(formData: FormData) {
     formData.append('parent', `${props.selectedParent?.id}`);
-    if (props.selectedCourse) formData.append('course', `${props.selectedCourse?.id}`);
+    if (props.selectedCourse)
+        formData.append('course', `${props.selectedCourse?.id}`);
 
     router.post(route('courses.add-course-file'), formData, {
         preserveUrl: true,
         preserveScroll: true,
         preserveState: false,
-        onSuccess: () => toast('Archivo añadido', { description: 'El archivo se ha añadido' }),
-        onError: () => toast('Error al añadir archivo', { description: 'El archivo no se ha añadido' }),
+        onSuccess: () =>
+            toast('Archivo añadido', {
+                description: 'El archivo se ha añadido',
+            }),
+        onError: () =>
+            toast('Error al añadir archivo', {
+                description: 'El archivo no se ha añadido',
+            }),
     });
 }
 
 function updateCourseFile(formData: FormData) {
     formData.append('parent', `${props.selectedParent?.id}`);
-    if (props.selectedCourse) formData.append('course', `${props.selectedCourse?.id}`);
+    if (props.selectedCourse)
+        formData.append('course', `${props.selectedCourse?.id}`);
 
     router.post(route('courses.update-course-file'), formData, {
         preserveUrl: true,
         preserveScroll: true,
         preserveState: false,
-        onSuccess: () => toast('Archivo actualizado', { description: 'El archivo se ha actualizado' }),
-        onError: () => toast('Error al actualizar archivo', { description: 'El archivo no se ha actualizado' }),
+        onSuccess: () =>
+            toast('Archivo actualizado', {
+                description: 'El archivo se ha actualizado',
+            }),
+        onError: () =>
+            toast('Error al actualizar archivo', {
+                description: 'El archivo no se ha actualizado',
+            }),
     });
 }
 
 function saveCourse(formData: FormData) {
     formData.append('parent', `${props.selectedParent?.id}`);
-    if (props.selectedCourse) formData.append('course', `${props.selectedCourse?.id}`);
+    if (props.selectedCourse)
+        formData.append('course', `${props.selectedCourse?.id}`);
 
     router.post(route('courses.upload'), formData, {
         preserveUrl: true,
         preserveScroll: true,
         preserveState: false,
-        onSuccess: () => toast('Curso creado', { description: 'El curso se ha creado' }),
-        onError: () => toast('Error al crear curso', { description: 'El curso no se ha creado' }),
+        onSuccess: () =>
+            toast('Curso creado', { description: 'El curso se ha creado' }),
+        onError: () =>
+            toast('Error al crear curso', {
+                description: 'El curso no se ha creado',
+            }),
     });
 }
 </script>
@@ -207,8 +291,13 @@ function saveCourse(formData: FormData) {
     <Head title="Cursos" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex size-full flex-col gap-4 overflow-x-auto rounded-xl p-4">
-            <CourseParents v-bind="{ parents, selectedParent }" @select:parent="selectParent" />
+        <div
+            class="flex size-full flex-col gap-6 overflow-x-auto rounded-xl p-4"
+        >
+            <CourseParents
+                v-bind="{ parents, selectedParent }"
+                @select:parent="selectParent"
+            />
 
             <div v-if="selectedParent" class="flex w-full gap-6">
                 <CourseList

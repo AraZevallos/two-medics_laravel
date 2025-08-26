@@ -54,7 +54,7 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
 
                 <Badge
                     v-if="selectedParent.children?.length"
-                    class="h-8 rounded-full bg-blue-500/20 px-4 py-2 uppercase text-blue-950"
+                    class="h-8 rounded-full bg-blue-500/20 px-4 py-2 text-blue-950 uppercase"
                 >
                     {{ selectedParent.children?.length }} contenidos
                 </Badge>
@@ -166,7 +166,7 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
 
         <CardFooter>
             <CourseCreation @save:course="emit('save:course', $event)">
-                <Button class="h-[52px] w-full rounded-[8px]">
+                <Button class="h-[52px] w-full rounded-[8px] font-normal">
                     <Plus class="mr-2 size-4" /> Agregar contenido
                 </Button>
             </CourseCreation>

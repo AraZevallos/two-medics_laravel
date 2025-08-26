@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
 import { Course } from '@/types';
-import { FilePenLine, LucideIcon, Megaphone, MessageCircleQuestion, Rocket, SquarePlay } from 'lucide-vue-next';
+import {
+    FilePenLine,
+    LucideIcon,
+    Megaphone,
+    MessageCircleQuestion,
+    Rocket,
+    SquarePlay,
+} from 'lucide-vue-next';
 import { PropType } from 'vue';
 
 defineProps({
@@ -31,10 +38,14 @@ const iconsMap: Record<string, LucideIcon> = {
             v-for="parent in parents"
             :key="parent.id"
             :variant="parent.id === selectedParent?.id ? 'default' : 'ghost'"
-            class="h-[42px] rounded-full"
+            class="h-[42px] rounded-full text-sm font-normal uppercase"
             @click="emit('select:parent', { parent: parent.id })"
         >
-            <component v-if="parent.icon" :is="iconsMap[parent.icon]" class="h-5 w-5" />
+            <component
+                v-if="parent.icon"
+                :is="iconsMap[parent.icon]"
+                class="h-5 w-5"
+            />
             <span>{{ parent.name }}</span>
         </Button>
     </div>
