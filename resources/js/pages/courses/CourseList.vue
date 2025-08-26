@@ -12,8 +12,15 @@ import TooltipProvider from '@/components/ui/tooltip/TooltipProvider.vue';
 import TooltipTrigger from '@/components/ui/tooltip/TooltipTrigger.vue';
 import { copyCode } from '@/lib/utils';
 import { Course } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { ChevronRight, CloudDownload, Eye, EyeOff, Files, Plus, RefreshCcw } from 'lucide-vue-next';
+import {
+    ChevronRight,
+    CloudDownload,
+    Eye,
+    EyeOff,
+    Files,
+    Plus,
+    RefreshCcw,
+} from 'lucide-vue-next';
 import { PropType } from 'vue';
 import CourseCreation from './CourseCreation.vue';
 
@@ -28,7 +35,11 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(['select:course', 'refresh:parent-code', 'save:course']);
+const emit = defineEmits([
+    'select:course',
+    'refresh:parent-code',
+    'save:course',
+]);
 
 const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
 </script>
@@ -41,22 +52,37 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                     {{ selectedParent.name }}
                 </div>
 
-                <Badge v-if="selectedParent.children?.length" class="h-8 rounded-full bg-blue-500/20 px-4 py-2 text-blue-950 uppercase">
+                <Badge
+                    v-if="selectedParent.children?.length"
+                    class="h-8 rounded-full bg-blue-500/20 px-4 py-2 uppercase text-blue-950"
+                >
                     {{ selectedParent.children?.length }} contenidos
                 </Badge>
             </CardTitle>
         </CardHeader>
 
         <CardContent class="flex flex-col gap-4">
-            <div class="flex items-center justify-center gap-4 rounded-md border px-4 py-2">
+            <div
+                class="flex items-center justify-center gap-4 rounded-md border px-4 py-2"
+            >
                 <div class="flex items-center">
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger as-child>
-                                <Button class="w-10 text-blue-400 hover:text-blue-600" variant="ghost">
-                                    <Link :href="route('courses.download-parent-zip', { parent: selectedParent.id })">
+                                <Button
+                                    class="w-10 text-blue-400 hover:text-blue-600"
+                                    variant="ghost"
+                                >
+                                    <a
+                                        :href="
+                                            route(
+                                                'courses.download-parent-zip',
+                                                { parent: selectedParent.id },
+                                            )
+                                        "
+                                    >
                                         <CloudDownload class="size-4" />
-                                    </Link>
+                                    </a>
                                 </Button>
                             </TooltipTrigger>
 
@@ -72,7 +98,12 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                                 <Button
                                     class="text-blue-400 hover:text-blue-600"
                                     variant="ghost"
-                                    @click="emit('refresh:parent-code', { parent: selectedParent.id, course: selectedCourse?.id })"
+                                    @click="
+                                        emit('refresh:parent-code', {
+                                            parent: selectedParent.id,
+                                            course: selectedCourse?.id,
+                                        })
+                                    "
                                 >
                                     <RefreshCcw class="size-4" />
                                 </Button>
@@ -89,7 +120,11 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                     Código: <span class="uppercase">{{ permanentCode }}</span>
                 </p>
 
-                <Button variant="ghost" class="text-blue-400 hover:text-blue-600" @click="copyCode(permanentCode)">
+                <Button
+                    variant="ghost"
+                    class="text-blue-400 hover:text-blue-600"
+                    @click="copyCode(permanentCode)"
+                >
                     <Files class="size-4" /> Copiar
                 </Button>
             </div>
@@ -100,9 +135,16 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                     :key="course.id"
                     :class="[
                         'flex cursor-pointer items-center justify-between gap-2 rounded-[16px] p-4',
-                        course.id === selectedCourse?.id ? 'bg-blue-100' : 'hover:bg-blue-100/40',
+                        course.id === selectedCourse?.id
+                            ? 'bg-blue-100'
+                            : 'hover:bg-blue-100/40',
                     ]"
-                    @click="emit('select:course', { parent: course.parent_id, course: course.id })"
+                    @click="
+                        emit('select:course', {
+                            parent: course.parent_id,
+                            course: course.id,
+                        })
+                    "
                 >
                     <ChevronRight class="size-4 text-blue-600" />
 
@@ -110,8 +152,13 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                         {{ course.name }}
                     </div>
 
-                    <div class="flex size-10 items-center justify-center rounded-full bg-cyan-600/80 text-white">
-                        <component :is="course.is_visible ? Eye : EyeOff" class="size-4" />
+                    <div
+                        class="flex size-10 items-center justify-center rounded-full bg-cyan-600/80 text-white"
+                    >
+                        <component
+                            :is="course.is_visible ? Eye : EyeOff"
+                            class="size-4"
+                        />
                     </div>
                 </div>
             </div>
@@ -119,7 +166,9 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
 
         <CardFooter>
             <CourseCreation @save:course="emit('save:course', $event)">
-                <Button class="h-[52px] w-full rounded-[8px]"> <Plus class="mr-2 size-4" /> Agregar contenido </Button>
+                <Button class="h-[52px] w-full rounded-[8px]">
+                    <Plus class="mr-2 size-4" /> Agregar contenido
+                </Button>
             </CourseCreation>
         </CardFooter>
     </Card>

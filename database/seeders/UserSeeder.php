@@ -12,35 +12,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
-            [
-                'name' => 'Araccelli Zevallos',
-                'email' => 'araccelli.zevallos@gmail.com',
-                'password' => bcrypt('12345'), // password
-                'role' => 'super-admin',
-                'guard' => 'web',
-            ],
-            [
-                'name' => 'Frank Jacobo',
-                'email' => 'frankejacobos@gmail.com',
-                'password' => bcrypt('12345'), // password
-                'role' => 'admin',
-                'guard' => 'web',
-            ],
-            [
-                'name' => 'Two Medics',
-                'email' => 'twomedicspruebas@gmail.com',
-                'password' => bcrypt('12345'), // password
-                'role' => 'admin',
-                'guard' => 'web',
-            ],
-        ];
-
-        foreach ($users as $user) {
+        $emails = config('custom.admin_emails');
+        foreach ($emails as $email) {
             User::factory()->create([
-                'name' => $user['name'],
-                'email' => $user['email'],
-                'password' => $user['password'], // password
+                'name' => 'Super Admin',
+                'email' => $email,
+                'password' => bcrypt('12345'),
             ]);
         }
     }

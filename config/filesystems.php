@@ -40,7 +40,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -55,6 +55,16 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+        ],
+
+        'r2' => [
+            'driver' => 's3',
+            'key' => env('CLOUDFARE_ACCESS_KEY_ID'),
+            'secret' => env('CLOUDFARE_SECRET_ACCESS_KEY'),
+            'region' => env('CLOUDFARE_REGION', 'auto'),
+            'bucket' => env('CLOUDFARE_BUCKET'),
+            'endpoint' => env('CLOUDFARE_ENDPOINT_S3'),
+            'use_path_style_endpoint' => true,
         ],
 
     ],
