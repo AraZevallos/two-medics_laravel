@@ -270,7 +270,7 @@ class CourseController extends Controller
                     $fileContent = Storage::disk('r2')->get($file->file_path);
 
                     if ($fileContent !== false) {
-                        $zip->addFromString($course->name . '/' . basename($file->file_path), $fileContent);
+                        $zip->addFromString($course->name . '/' . basename($file->file_name), $fileContent);
                     }
                 }
             }
