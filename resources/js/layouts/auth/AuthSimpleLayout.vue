@@ -99,8 +99,9 @@ defineProps<{
 
         <div
             class="absolute bottom-0 flex w-full flex-col items-center justify-center py-4"
+            style="background-color: rgba(112, 127, 143, 0.12)"
         >
-            <p class="text-muted-foreground font-normal">
+            <p class="font-normal" style="color: #babfc4">
                 © 2025 TwoMedics. Todos los derechos reservados.
             </p>
         </div>
