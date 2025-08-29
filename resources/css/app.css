@@ -60,8 +60,17 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-blue-950: #002570;
+    --color-blue-100: #e9f4ff;
+    --color-blue-200: #bfdeff;
+    --color-blue-300: #80beff;
+    --color-blue-400: #409eff;
     --color-blue-500: #017eff;
+    --color-blue-600: #005ebf;
+    --color-blue-700: #003f7f;
+    --color-blue-800: #001f3f;
+    --color-blue-900: #001327;
+    --color-blue-950: #002570;
+
     --color-cyan-400: #4bb8ec;
 }
 

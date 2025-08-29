@@ -2,10 +2,9 @@
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Form, Head } from '@inertiajs/vue3';
-import { LoaderCircle } from 'lucide-vue-next';
+import { LoaderCircle, LockKeyhole, User, UserCheck } from 'lucide-vue-next';
 
 defineProps<{
     isValidEmail?: boolean;
@@ -13,7 +12,7 @@ defineProps<{
 </script>
 
 <template>
-    <AuthBase title="Inicia sesión en tu cuenta" description="Ingresa tu correo electrónico">
+    <AuthBase title="Inicia sesión" description="Ingresa tu correo electrónico">
         <Head title="Iniciar sesión" />
 
         <Form
@@ -23,9 +22,9 @@ defineProps<{
             v-slot="{ errors, processing }"
             class="flex flex-col gap-6"
         >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Correo electrónico</Label>
+            <div class="grid gap-4">
+                <div class="relative grid gap-2">
+                    <!-- <Label for="email">Correo electrónico</Label> -->
                     <Input
                         :readonly="isValidEmail"
                         :tabindex="1"
@@ -33,15 +32,24 @@ defineProps<{
                         autofocus
                         id="email"
                         name="email"
-                        placeholder="email@example.com"
+                        placeholder="Correo electrónico"
                         required
                         type="email"
+                        class="pl-10"
                     />
+
+                    <div class="absolute top-0 left-4 flex h-12 items-center">
+                        <component
+                            :is="isValidEmail ? UserCheck : User"
+                            class="size-4 text-blue-600"
+                        />
+                    </div>
+
                     <InputError :message="errors.email" />
                 </div>
 
-                <div v-if="isValidEmail" class="grid gap-2">
-                    <Label for="password">Contraseña</Label>
+                <div v-if="isValidEmail" class="relative grid gap-2">
+                    <!-- <Label for="password">Contraseña</Label> -->
                     <Input
                         id="password"
                         type="password"
@@ -49,16 +57,31 @@ defineProps<{
                         required
                         :tabindex="2"
                         autocomplete="current-password"
-                        placeholder="Password"
+                        placeholder="Código de sesión"
+                        class="pl-10"
                     />
+
+                    <div class="absolute top-0 left-4 flex h-12 items-center">
+                        <LockKeyhole class="size-4 text-blue-600" />
+                    </div>
+
                     <InputError :message="errors.password" />
                 </div>
-
-                <Button type="submit" class="mt-4 w-full" :tabindex="4" :disabled="processing">
-                    <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
-                    {{ isValidEmail ? 'Iniciar sesión' : 'Enviar código de acceso' }}
-                </Button>
             </div>
+
+            <Button
+                :disabled="processing"
+                :tabindex="4"
+                class="w-full"
+                type="submit"
+                size="xl"
+                variant="secondary"
+            >
+                <LoaderCircle v-if="processing" class="h-4 w-4 animate-spin" />
+                {{
+                    isValidEmail ? 'Iniciar sesión' : 'Enviar código de acceso'
+                }}
+            </Button>
         </Form>
     </AuthBase>
 </template>

@@ -13,5 +13,10 @@ defineProps<Props>();
 </script>
 
 <template>
-    <img src="../../imgs/img-logo.png" alt="Logo TwoMedics" :class="className" v-bind="$attrs" />
+    <img
+        src="/img-logo.png"
+        alt="Logo TwoMedics"
+        :class="className"
+        v-bind="$attrs"
+    />
 </template>
