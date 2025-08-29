@@ -19,9 +19,9 @@ class MailService
 
     public function send(Mailable $mailable): void
     {
-        $mg = Mailgun::create(getenv('MAILGUN_SECRET'), getenv('MAILGUN_ENDPOINT'));
+        $mg = Mailgun::create(config('services.mailgun.secret'), config('services.mailgun.endpoint'));
         $mg->messages()->send(
-            getenv('MAILGUN_DOMAIN'),
+            config('services.mailgun.domain'),
             [
                 'from' => $mailable->envelope()->from,
                 'to' => $this->to,
