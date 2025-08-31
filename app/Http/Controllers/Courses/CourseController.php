@@ -39,7 +39,12 @@ class CourseController extends Controller
 
     public function parent(Course $parent)
     {
-        $parent->load(['codes', 'children']);
+        $parent->load([
+            'codes',
+            'children' => function ($query) {
+                $query->orderBy('name', 'asc');
+            },
+        ]);
 
         return Inertia::render('courses/Courses', [
             'parents' => $this->parents,
@@ -49,7 +54,12 @@ class CourseController extends Controller
 
     public function course(Course $parent, Course $course)
     {
-        $parent->load(['codes', 'children']);
+        $parent->load([
+            'codes',
+            'children' => function ($query) {
+                $query->orderBy('name', 'asc');
+            },
+        ]);
         $course->load(['codes', 'files']);
 
         return Inertia::render('courses/Courses', [
@@ -65,7 +75,12 @@ class CourseController extends Controller
 
         if ($code) $code->update(['value' => randomfnWithYear()]);
 
-        $parent->load(['codes', 'children']);
+        $parent->load([
+            'codes',
+            'children' => function ($query) {
+                $query->orderBy('name', 'asc');
+            },
+        ]);
 
         return Inertia::render('courses/Courses', [
             'parents' => $this->parents,
@@ -79,7 +94,12 @@ class CourseController extends Controller
 
         if ($code) $code->update(['value' => randomfnWithYear()]);
 
-        $parent->load(['codes', 'children']);
+        $parent->load([
+            'codes',
+            'children' => function ($query) {
+                $query->orderBy('name', 'asc');
+            },
+        ]);
         if ($course) $course->load(['codes', 'files']);
 
         Log::info('course', [
@@ -192,7 +212,12 @@ class CourseController extends Controller
         $selectedParent = null;
         $selectedCourse = null;
 
-        if ($request->has('parent')) $selectedParent = Course::with(['children', 'codes'])->find($request->parent);
+        if ($request->has('parent'))
+            $selectedParent = Course::with(
+                ['codes', 'children' => function ($query) {
+                    $query->orderBy('name', 'asc');
+                }]
+            )->find($request->parent);
 
         if ($request->has('course')) $selectedCourse = Course::with(['codes', 'files'])->find($request->course);
 
@@ -266,11 +291,13 @@ class CourseController extends Controller
         $zip = new \ZipArchive;
         if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
             foreach ($parent->children as $course) {
-                foreach ($course->files as $file) {
-                    $fileContent = Storage::disk('r2')->get($file->file_path);
+                if ($course->is_visible) {
+                    foreach ($course->files as $file) {
+                        $fileContent = Storage::disk('r2')->get($file->file_path);
 
-                    if ($fileContent !== false) {
-                        $zip->addFromString($course->name . '/' . basename($file->file_name), $fileContent);
+                        if ($fileContent !== false) {
+                            $zip->addFromString($course->name . '/' . basename($file->file_name), $fileContent);
+                        }
                     }
                 }
             }
