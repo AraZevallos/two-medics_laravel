@@ -12,17 +12,19 @@ class ConfigSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('configs')->insert([
+        DB::table('client_configurations')->insert([
             'tiktok' => 'https://tiktok.com',
             'whatsapp' => 'https://wa.me/123456789',
             'telegram' => 'https://t.me/username',
             'correo' => 'correo@ejemplo.com',
-            'facebook' => 'https://facebook.com/usuario',
-            'groups' => true,
-            'flashcards' => true,
-            'question' => 'Pregunta ejemplo',
-            'answer' => 'Respuesta ejemplo',
-            'url' => 'https://example.com',
+
+            'question' => '¿Cuál es tu problema?',
+            'answer' => 'Mi problema es...',
+            'explanation' => 'Explicación de la solución',
+
+            'image_path' => '',
+            'image_name' => '',
+            'image_visible' => true,
         ]);
     }
 }

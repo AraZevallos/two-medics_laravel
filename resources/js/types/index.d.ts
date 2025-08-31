@@ -74,6 +74,27 @@ export interface Course {
     files?: CourseFile[];
 }
 
+export interface ClientConfiguration {
+    id: number;
+
+    // socials
+    tiktok?: string | null;
+    whatsapp?: string | null;
+    telegram?: string | null;
+    correo?: string | null;
+
+    // dynamic questions
+    question?: string | null;
+    answer?: string | null;
+    explanation?: string | null;
+
+    // promocional
+    image_url?: string | null;
+    image_path?: string | null;
+    image_name?: string | null;
+    image_visible?: boolean | null;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {

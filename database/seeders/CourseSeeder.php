@@ -46,32 +46,32 @@ class CourseSeeder extends Seeder
             ]);
 
             // Insert children
-            foreach ($children as $child) {
-                $childId = DB::table('courses')->insertGetId([
-                    'name' => $child['name'],
-                    'parent_id' => $parentId,
-                ]);
+            // foreach ($children as $child) {
+            //     $childId = DB::table('courses')->insertGetId([
+            //         'name' => $child['name'],
+            //         'parent_id' => $parentId,
+            //     ]);
 
-                // Insert 1 persistent code for child
-                DB::table('codes')->insert([
-                    'course_id' => $childId,
-                    'is_enabled' => true,
-                    'is_persistent' => true,
-                    'expiration_date' => null,
-                    'value' => Str::upper(Str::random(6)) . date('y'),
-                ]);
+            //     // Insert 1 persistent code for child
+            //     DB::table('codes')->insert([
+            //         'course_id' => $childId,
+            //         'is_enabled' => true,
+            //         'is_persistent' => true,
+            //         'expiration_date' => null,
+            //         'value' => Str::upper(Str::random(6)) . date('y'),
+            //     ]);
 
-                // Insert 2 non-persistent codes for child
-                for ($i = 0; $i < 2; $i++) {
-                    DB::table('codes')->insert([
-                        'course_id' => $childId,
-                        'is_enabled' => true,
-                        'is_persistent' => false,
-                        'expiration_date' => null,
-                        'value' => Str::upper(Str::random(6)) . date('y'),
-                    ]);
-                }
-            }
+            //     // Insert 2 non-persistent codes for child
+            //     for ($i = 0; $i < 2; $i++) {
+            //         DB::table('codes')->insert([
+            //             'course_id' => $childId,
+            //             'is_enabled' => true,
+            //             'is_persistent' => false,
+            //             'expiration_date' => null,
+            //             'value' => Str::upper(Str::random(6)) . date('y'),
+            //         ]);
+            //     }
+            // }
         }
     }
 }

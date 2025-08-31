@@ -11,18 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('configs', function (Blueprint $table) {
+        Schema::create('client_configurations', function (Blueprint $table) {
             $table->id();
-            $table->string('tiktok', 255);
-            $table->string('whatsapp', 255);
-            $table->string('telegram', 255);
-            $table->string('correo', 255);
-            $table->string('facebook', 255);
-            $table->boolean('groups')->default(true);
-            $table->boolean('flashcards')->default(true);
-            $table->string('question', 255);
-            $table->string('answer', 255);
-            $table->string('url', 255);
+
+            // socials
+            $table->string('tiktok', 255)->nullable();
+            $table->string('whatsapp', 255)->nullable();
+            $table->string('telegram', 255)->nullable();
+            $table->string('correo', 255)->nullable();
+
+            // dynamic questions
+            $table->string('question', 175)->nullable();
+            $table->string('answer', 52)->nullable();
+            $table->string('explanation', 175)->nullable();
+
+            // promocional
+            $table->string('image_path', 255)->nullable();
+            $table->string('image_name', 255)->nullable();
+            $table->boolean('image_visible')->default(true);
+
             $table->timestamps();
         });
     }
@@ -32,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('configs');
+        Schema::dropIfExists('client_configurations');
     }
 };

@@ -67,6 +67,16 @@ return [
             'use_path_style_endpoint' => true,
         ],
 
+        'r2_public' => [
+            'driver' => 's3',
+            'key' => env('CLOUDFARE_ACCESS_KEY_ID'),
+            'secret' => env('CLOUDFARE_SECRET_ACCESS_KEY'),
+            'region' => env('CLOUDFARE_REGION', 'auto'),
+            'bucket' => env('CLOUDFARE_BUCKET_PUBLIC'),
+            'endpoint' => env('CLOUDFARE_ENDPOINT_S3'),
+            'use_path_style_endpoint' => true,
+        ],
+
     ],
 
     /*
