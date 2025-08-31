@@ -45,7 +45,7 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
 </script>
 
 <template>
-    <Card class="w-full max-w-[700px] border-none shadow-none">
+    <Card class="w-full max-w-[700px] self-start border-none shadow-none">
         <CardHeader>
             <CardTitle class="flex items-center gap-2 text-blue-950">
                 <div class="flex-1">
@@ -53,24 +53,27 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                 </div>
 
                 <Badge
-                    v-if="selectedParent.children?.length"
-                    class="h-8 rounded-full bg-blue-500/20 px-4 py-2 text-blue-950 uppercase"
+                    class="h-8 rounded-full bg-gray-100 px-4 py-2 text-blue-950 uppercase"
                 >
-                    {{ selectedParent.children?.length }} contenidos
+                    {{
+                        !selectedParent.children?.length
+                            ? 'Sin contenido'
+                            : selectedParent.children.length + ' contenidos'
+                    }}
                 </Badge>
             </CardTitle>
         </CardHeader>
 
         <CardContent class="flex flex-col gap-4">
             <div
-                class="flex items-center justify-center gap-4 rounded-md border px-4 py-2"
+                class="box-border flex items-center justify-center gap-4 rounded-md border px-4 py-2"
             >
                 <div class="flex items-center">
-                    <TooltipProvider>
+                    <TooltipProvider v-if="selectedParent.children?.length">
                         <Tooltip>
                             <TooltipTrigger as-child>
                                 <Button
-                                    class="w-10 text-blue-400 hover:text-blue-600"
+                                    class="size-10 w-10 text-blue-400 hover:text-blue-600"
                                     variant="ghost"
                                 >
                                     <a
@@ -96,7 +99,7 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                         <Tooltip>
                             <TooltipTrigger as-child>
                                 <Button
-                                    class="text-blue-400 hover:text-blue-600"
+                                    class="size-10 text-blue-400 hover:text-blue-600"
                                     variant="ghost"
                                     @click="
                                         emit('refresh:parent-code', {
@@ -116,25 +119,25 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                     </TooltipProvider>
                 </div>
 
-                <p class="space-x-1 text-sm text-gray-600">
+                <p class="space-x-1 text-sm text-gray-400">
                     Código: <span class="uppercase">{{ permanentCode }}</span>
                 </p>
 
                 <Button
                     variant="ghost"
-                    class="text-blue-400 hover:text-blue-600"
+                    class="h-10 text-blue-400 hover:text-blue-600"
                     @click="copyCode(permanentCode)"
                 >
                     <Files class="size-4" /> Copiar
                 </Button>
             </div>
 
-            <div class="flex max-h-[420px] flex-col gap-4 overflow-y-auto">
+            <div class="flex max-h-[420px] flex-col gap-2 overflow-y-auto">
                 <div
                     v-for="course in selectedParent.children"
                     :key="course.id"
                     :class="[
-                        'flex cursor-pointer items-center justify-between gap-2 rounded-[16px] p-4',
+                        'flex h-[54px] cursor-pointer items-center justify-between gap-2 rounded-[16px] border border-blue-100 p-4',
                         course.id === selectedCourse?.id
                             ? 'bg-blue-100'
                             : 'hover:bg-blue-100/40',
@@ -149,11 +152,26 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
                     <ChevronRight class="size-4 text-blue-600" />
 
                     <div class="flex-1 text-blue-950">
-                        {{ course.name }}
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger as-child>
+                                    <p class="m-0 w-[360px] truncate">
+                                        {{ course.name }}
+                                    </p>
+                                </TooltipTrigger>
+
+                                <TooltipContent>
+                                    {{ course.name }}
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
 
                     <div
-                        class="flex size-10 items-center justify-center rounded-full bg-cyan-600/80 text-white"
+                        :class="[
+                            'flex size-9 items-center justify-center rounded-full text-white',
+                            course.is_visible ? 'bg-cyan-400' : 'bg-[#BABFC4]',
+                        ]"
                     >
                         <component
                             :is="course.is_visible ? Eye : EyeOff"
@@ -165,7 +183,10 @@ const permanentCode = props.selectedParent.codes?.at(0)?.value ?? '';
         </CardContent>
 
         <CardFooter>
-            <CourseCreation @save:course="emit('save:course', $event)">
+            <CourseCreation
+                classes="w-full"
+                @save:course="emit('save:course', $event)"
+            >
                 <Button class="h-[52px] w-full rounded-[8px] font-normal">
                     <Plus class="mr-2 size-4" /> Agregar contenido
                 </Button>

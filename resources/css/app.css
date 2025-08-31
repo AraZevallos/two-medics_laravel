@@ -71,7 +71,45 @@
     --color-blue-900: #001327;
     --color-blue-950: #002570;
 
-    --color-cyan-400: #4bb8ec;
+    --color-cyan-200: #d4eff3;
+    --color-cyan-400: #00a2b8;
+
+    --color-gray-100: #d4dae7; /* secondary first soft */
+    --color-gray-200: rgba(1, 126, 255, 0.12); /* shadow primary */
+    --color-gray-300: rgba(0, 31, 63, 0.08); /* shadow overlay */
+    --color-gray-400: #7f92b7; /* secondary first medium */
+    --color-gray-500: #707f8f; /* neutral sobordinary */
+    --color-gray-600: #2b333b; /* neutral base */
+}
+
+p {
+    @apply text-[16px];
+    line-height: 160%;
+}
+
+h1 {
+    @apply text-[42px];
+    line-height: 125%;
+}
+
+h2 {
+    @apply text-[32px];
+    line-height: 130%;
+}
+
+h3 {
+    @apply text-[24px];
+    line-height: 135%;
+}
+
+h4 {
+    @apply text-[20px];
+    line-height: 140%;
+}
+
+h5 {
+    @apply text-[18px];
+    line-height: 140%;
 }
 
 /*
@@ -117,7 +155,8 @@
     --muted-foreground: hsl(0 0% 45.1%);
     --accent: hsl(0 0% 96.1%);
     --accent-foreground: hsl(0 0% 9%);
-    --destructive: hsl(0 84.2% 60.2%);
+    /* --destructive: hsl(0 84.2% 60.2%); */
+    --destructive: #f13463;
     --destructive-foreground: hsl(0 0% 98%);
     --border: hsl(0 0% 92.8%);
     --input: hsl(0 0% 89.8%);

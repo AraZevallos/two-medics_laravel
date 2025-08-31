@@ -9,19 +9,21 @@ import Tooltip from '@/components/ui/tooltip/Tooltip.vue';
 import TooltipContent from '@/components/ui/tooltip/TooltipContent.vue';
 import TooltipProvider from '@/components/ui/tooltip/TooltipProvider.vue';
 import TooltipTrigger from '@/components/ui/tooltip/TooltipTrigger.vue';
-import { copyCode } from '@/lib/utils';
+import { copyCode, middleEllipsis } from '@/lib/utils';
 import { Course, CourseCode } from '@/types';
 import {
     Eye,
     EyeOff,
     Files,
+    FileText,
     Plus,
     RefreshCcw,
     Trash,
     X,
 } from 'lucide-vue-next';
-import { PropType, watch } from 'vue';
+import { computed, PropType, watch } from 'vue';
 import CourseCreation from './CourseCreation.vue';
+import CourseDeletion from './CourseDeletion.vue';
 
 const props = defineProps({
     selectedCourse: {
@@ -45,6 +47,8 @@ function setCodes() {
 setCodes();
 watch(props.selectedCourse, setCodes);
 
+const isVisible = computed(() => props.selectedCourse.is_visible);
+
 const emit = defineEmits([
     'add:course-code',
     'add:course-file',
@@ -60,16 +64,24 @@ const emit = defineEmits([
 
 <template>
     <Card
-        class="w-full min-w-[660px] self-start border-none bg-blue-950 shadow-none"
+        :class="
+            'w-full min-w-[660px] self-start rounded-[16px] border-none shadow-none' +
+            (isVisible ? ' bg-blue-950' : ' bg-gray-100')
+        "
     >
         <CardHeader>
             <CardTitle class="flex items-center gap-2">
-                <div class="flex-1 text-white">
+                <div
+                    :class="[
+                        'flex-1 text-[20px] font-semibold',
+                        isVisible ? 'text-white' : 'text-blue-950',
+                    ]"
+                >
                     {{ selectedCourse.name }}
                 </div>
 
                 <div
-                    v-if="permanentCode"
+                    v-if="permanentCode && isVisible"
                     class="flex items-center space-x-2 p-4"
                 >
                     <TooltipProvider>
@@ -77,7 +89,7 @@ const emit = defineEmits([
                             <TooltipTrigger as-child>
                                 <Button
                                     variant="ghost"
-                                    class="text-blue-400 hover:bg-blue-100/20 hover:text-blue-400"
+                                    class="text-blue-300 hover:bg-blue-100/20 hover:text-blue-300"
                                     @click="
                                         emit('refresh:course-code', {
                                             parent: selectedCourse.parent_id,
@@ -121,15 +133,15 @@ const emit = defineEmits([
             </CardTitle>
         </CardHeader>
 
-        <CardContent class="flex flex-col gap-8 text-gray-400">
-            <div class="flex flex-col gap-4">
-                <p class="text-sm">Códigos de acceso único</p>
+        <CardContent class="flex flex-col gap-8">
+            <div v-if="isVisible" class="flex flex-col gap-4">
+                <p class="text-sm text-gray-400">Códigos de acceso único</p>
 
-                <div class="flex w-full flex-wrap gap-2">
+                <div class="flex w-full flex-wrap items-center gap-2">
                     <div
                         v-for="code in temporaryCodes"
                         :key="code.id"
-                        class="flex items-center justify-between gap-2 rounded-lg bg-blue-50/10 py-2 pr-2 pl-4 text-white"
+                        class="flex items-center justify-between gap-2 rounded-lg bg-gray-200 px-4 py-2 text-white"
                     >
                         <TooltipProvider>
                             <Tooltip>
@@ -137,7 +149,7 @@ const emit = defineEmits([
                                     <span
                                         class="flex size-2 rounded-full"
                                         :class="{
-                                            'bg-cyan-600':
+                                            'bg-cyan-400':
                                                 !code.expiration_date,
                                             'bg-amber-600':
                                                 code.expiration_date,
@@ -162,13 +174,13 @@ const emit = defineEmits([
                             {{ code.value }}
                         </div>
 
-                        <div class="flex items-center">
+                        <div class="flex items-center gap-2">
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger as-child>
                                         <Button
                                             variant="ghost"
-                                            class="text-blue-400 hover:bg-blue-100/20 hover:text-blue-400"
+                                            class="size-10 text-blue-400 hover:bg-blue-100/20 hover:text-blue-400"
                                             @click="copyCode(code.value)"
                                         >
                                             <Files class="size-4" />
@@ -184,9 +196,8 @@ const emit = defineEmits([
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger as-child>
-                                        <Button
-                                            variant="ghost"
-                                            class="text-gray-400 hover:bg-blue-100/20 hover:text-gray-400"
+                                        <X
+                                            class="size-4 cursor-pointer text-gray-400 hover:text-gray-500"
                                             @click="
                                                 emit('delete:course-code', {
                                                     parent: selectedCourse.parent_id,
@@ -194,9 +205,7 @@ const emit = defineEmits([
                                                     code: code.id,
                                                 })
                                             "
-                                        >
-                                            <X class="size-4" />
-                                        </Button>
+                                        />
                                     </TooltipTrigger>
 
                                     <TooltipContent>
@@ -206,70 +215,105 @@ const emit = defineEmits([
                             </TooltipProvider>
                         </div>
                     </div>
-                </div>
 
-                <Button
-                    class="self-start font-normal"
-                    size="lg"
-                    @click="
-                        emit('add:course-code', {
-                            parent: selectedCourse.parent_id,
-                            course: selectedCourse.id,
-                        })
-                    "
-                >
-                    <Plus class="mr-2 size-4" /> Nuevo código
-                </Button>
+                    <Button
+                        class="gap-2 font-normal"
+                        size="xl"
+                        @click="
+                            emit('add:course-code', {
+                                parent: selectedCourse.parent_id,
+                                course: selectedCourse.id,
+                            })
+                        "
+                    >
+                        <Plus class="size-4" /> Nuevo código
+                    </Button>
+                </div>
+            </div>
+
+            <div
+                v-else
+                class="flex flex-col gap-4 rounded-[8px] bg-gray-300 px-10 py-4"
+            >
+                <p class="text-center text-sm text-gray-500">
+                    Los códigos de acceso no están disponibles mientras el curso
+                    esté deshabilitado
+                </p>
             </div>
 
             <div class="flex flex-col gap-4">
-                <p class="text-sm">Archivos de la carpeta</p>
+                <p class="text-sm text-gray-400">Archivos de la carpeta</p>
 
-                <div class="flex w-full flex-wrap gap-2">
+                <div
+                    v-if="!selectedCourse.files?.length"
+                    class="flex flex-col gap-4"
+                >
+                    <p class="text-gray-500">
+                        No hay archivos para este contenido
+                    </p>
+
+                    <CourseCreation
+                        v-if="isVisible"
+                        :course="selectedCourse"
+                        classes="self-start"
+                        @save:course="emit('add:course-file', $event)"
+                    >
+                        <Button class="gap-2 font-normal" size="xl">
+                            <Plus class="size-4" /> Nuevo archivo
+                        </Button>
+                    </CourseCreation>
+                </div>
+
+                <div v-else class="flex w-full flex-wrap items-center gap-2">
                     <div
                         v-for="file in selectedCourse.files"
                         :key="file.id"
-                        class="flex items-center justify-between gap-2 rounded-lg bg-blue-400/10 py-2 pr-2 pl-4 whitespace-nowrap text-white/90"
+                        :class="[
+                            'flex h-[56px] items-center justify-between gap-4 rounded-lg px-4 py-2 whitespace-nowrap',
+                            isVisible
+                                ? 'bg-gray-200 text-white'
+                                : 'bg-gray-300 text-blue-950',
+                        ]"
                     >
-                        <div class="flex-1 truncate text-sm">
-                            {{ file.file_name }}
-                        </div>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger as-child>
+                                    <div
+                                        class="flex flex-1 items-center gap-2 text-sm"
+                                    >
+                                        <FileText class="size-4" />
 
-                        <div class="flex items-center">
+                                        {{ middleEllipsis(file.file_name) }}
+                                    </div>
+                                </TooltipTrigger>
+
+                                <TooltipContent>
+                                    <p>{{ file.file_name }}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+
+                        <div v-if="isVisible" class="flex items-center gap-2">
+                            <CourseCreation
+                                :course="selectedCourse"
+                                :file="file"
+                                @save:course="
+                                    emit('update:course-file', $event)
+                                "
+                            >
+                                <Button
+                                    variant="ghost"
+                                    class="size-10 text-blue-400 hover:bg-blue-100/20 hover:text-blue-400"
+                                >
+                                    <RefreshCcw class="size-4" />
+                                </Button>
+                            </CourseCreation>
+
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger as-child>
-                                        <CourseCreation
-                                            :course="selectedCourse"
-                                            :file="file"
-                                            @save:course="
-                                                emit(
-                                                    'update:course-file',
-                                                    $event,
-                                                )
-                                            "
-                                        >
-                                            <Button
-                                                variant="ghost"
-                                                class="text-blue-400 hover:bg-blue-100/20 hover:text-blue-400"
-                                            >
-                                                <RefreshCcw class="size-4" />
-                                            </Button>
-                                        </CourseCreation>
-                                    </TooltipTrigger>
-
-                                    <TooltipContent>
-                                        <p>Cargar otro archivo</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </TooltipProvider>
-
-                            <TooltipProvider>
-                                <Tooltip>
-                                    <TooltipTrigger as-child>
-                                        <Button
-                                            variant="ghost"
-                                            class="text-gray-400 hover:bg-blue-100/20 hover:text-gray-400"
+                                        <X
+                                            class="size-4 cursor-pointer text-gray-400 hover:text-gray-500"
                                             @click="
                                                 emit('delete:course-file', {
                                                     parent: selectedCourse.parent_id,
@@ -277,9 +321,7 @@ const emit = defineEmits([
                                                     file: file.id,
                                                 })
                                             "
-                                        >
-                                            <X class="size-4" />
-                                        </Button>
+                                        />
                                     </TooltipTrigger>
 
                                     <TooltipContent>
@@ -289,25 +331,29 @@ const emit = defineEmits([
                             </TooltipProvider>
                         </div>
                     </div>
-                </div>
 
-                <CourseCreation
-                    :course="selectedCourse"
-                    @save:course="emit('add:course-file', $event)"
-                >
-                    <Button class="self-start font-normal" size="lg">
-                        <Plus class="mr-2 size-4" /> Nuevo archivo
-                    </Button>
-                </CourseCreation>
+                    <CourseCreation
+                        v-if="isVisible"
+                        :course="selectedCourse"
+                        @save:course="emit('add:course-file', $event)"
+                    >
+                        <Button class="gap-2 font-normal" size="xl">
+                            <Plus class="size-4" /> Nuevo archivo
+                        </Button>
+                    </CourseCreation>
+                </div>
             </div>
         </CardContent>
 
         <CardFooter class="gap-2">
             <Button
-                class="h-[52px] flex-1"
-                :variant="selectedCourse.is_visible ? 'default' : 'outline'"
-                :disabled="selectedCourse.is_visible"
-                :class="{ 'bg-cyan-600': selectedCourse.is_visible }"
+                class="h-[52px] flex-1 gap-2"
+                :disabled="isVisible"
+                :class="
+                    isVisible
+                        ? 'bg-cyan-400'
+                        : 'bg-blue-950 hover:bg-blue-950/80'
+                "
                 @click="
                     emit('enable:course', {
                         parent: selectedCourse.parent_id,
@@ -315,14 +361,17 @@ const emit = defineEmits([
                     })
                 "
             >
-                <Eye class="mr-2 size-4" />
-                {{ selectedCourse.is_visible ? 'Habilitado' : 'Habilitar' }}
+                <Eye class="size-4" />
+                {{ isVisible ? 'Habilitado' : 'Habilitar' }}
             </Button>
 
             <Button
-                class="h-[52px] flex-1"
-                :variant="!selectedCourse.is_visible ? 'default' : 'outline'"
-                :disabled="!selectedCourse.is_visible"
+                :disabled="!isVisible"
+                :variant="!isVisible ? 'default' : 'outline'"
+                :class="[
+                    'h-[52px] flex-1 gap-2',
+                    { 'bg-white text-blue-950': !isVisible },
+                ]"
                 @click="
                     emit('disable:course', {
                         parent: selectedCourse.parent_id,
@@ -330,26 +379,23 @@ const emit = defineEmits([
                     })
                 "
             >
-                <EyeOff class="mr-2 size-4" />
-                {{
-                    !selectedCourse.is_visible
-                        ? 'Deshabilitado'
-                        : 'Deshabilitar'
-                }}
+                <EyeOff class="size-4" />
+                {{ !isVisible ? 'Deshabilitado' : 'Deshabilitar' }}
             </Button>
 
-            <Button
-                variant="destructive"
-                class="h-[52px] w-[52px]"
-                @click="
+            <CourseDeletion
+                :course="selectedCourse"
+                @delete:course="
                     emit('delete:course', {
                         parent: selectedCourse.parent_id,
                         course: selectedCourse.id,
                     })
                 "
             >
-                <Trash />
-            </Button>
+                <Button variant="destructive" class="size-[52px]">
+                    <Trash />
+                </Button>
+            </CourseDeletion>
         </CardFooter>
     </Card>
 </template>

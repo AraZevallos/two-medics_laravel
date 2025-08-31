@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useConfirmation } from '@/composables/useConfirmation';
 import AppLayout from '@/layouts/AppLayout.vue';
 import CourseDetail from '@/pages/courses/CourseDetail.vue';
 import CourseList from '@/pages/courses/CourseList.vue';
@@ -39,6 +40,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/cursos',
     },
 ];
+
+function showConfirmation(message: string, error = false) {
+    useConfirmation().show(message, error);
+}
 
 function selectParent({ parent }: { parent: number }) {
     router.visit(route('courses.parent', { parent }));
@@ -188,9 +193,7 @@ function deleteCourse(payload: { parent: number; course: number }) {
         preserveScroll: true,
         preserveState: false,
         onSuccess: () => {
-            toast('Curso eliminado', {
-                description: 'El curso se ha eliminado',
-            });
+            showConfirmation('Eliminaste el contenido con éxito.');
             router.visit(route('courses.parent', { parent: payload.parent }), {
                 preserveScroll: true,
                 preserveState: false,
@@ -198,9 +201,10 @@ function deleteCourse(payload: { parent: number; course: number }) {
             });
         },
         onError: () =>
-            toast('Error al eliminar curso', {
-                description: 'El curso no se ha eliminado',
-            }),
+            showConfirmation(
+                'Lo sentimos, no se ha podido eliminar el contenido.',
+                true,
+            ),
     });
 }
 
@@ -277,12 +281,12 @@ function saveCourse(formData: FormData) {
         preserveUrl: true,
         preserveScroll: true,
         preserveState: false,
-        onSuccess: () =>
-            toast('Curso creado', { description: 'El curso se ha creado' }),
+        onSuccess: () => showConfirmation('Agregaste el curso con éxito.'),
         onError: () =>
-            toast('Error al crear curso', {
-                description: 'El curso no se ha creado',
-            }),
+            showConfirmation(
+                'Lo sentimos, no se ha podido agregar el curso.',
+                true,
+            ),
     });
 }
 </script>

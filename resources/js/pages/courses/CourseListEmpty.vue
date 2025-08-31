@@ -22,18 +22,18 @@ function openLink() {
 </script>
 
 <template>
-    <section class="flex w-full flex-1 gap-6 px-6">
+    <section class="flex w-full flex-1 gap-6">
         <Card
-            class="br-24 relative flex w-full items-end gap-6 border-none px-10 shadow-none"
+            class="relative m-0 flex w-full rounded-[24px] border-none p-0 shadow-none"
         >
             <div
                 class="absolute top-6 right-6 flex items-center gap-2 rounded-[24px] bg-cyan-400 px-4 py-2 text-white"
             >
-                <Info class="mr-2 size-4" />
+                <Info class="size-4" />
                 Modo Administrador
             </div>
 
-            <CardContent class="flex">
+            <CardContent class="flex items-end gap-6 px-10 py-0">
                 <img
                     src="../../../imgs/img-bienvenida.png"
                     style="width: 315px"
@@ -77,7 +77,8 @@ function openLink() {
             </div>
 
             <div
-                class="flex h-full flex-col items-center justify-center gap-2 rounded-[8px] bg-cyan-400 text-white uppercase"
+                class="flex h-full flex-col items-center justify-center gap-2 rounded-[8px] text-white uppercase"
+                style="background-color: #4bb8ec"
             >
                 <h5 class="text-2xl font-semibold">
                     {{ summary.courses }}

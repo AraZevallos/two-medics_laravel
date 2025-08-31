@@ -30,13 +30,13 @@ defineProps<{
                 </Link>
 
                 <div class="flex flex-col text-[32px]">
-                    <h2 class="font-semibold text-gray-300">Two</h2>
+                    <h2 class="font-semibold text-white">Two</h2>
 
                     <h2 class="font-semibold text-blue-600">Admins</h2>
                 </div>
             </div>
 
-            <h5 class="font-normal text-gray-300">
+            <h5 class="font-normal text-white">
                 Sistema administrativo de TwoMedics
             </h5>
         </div>
