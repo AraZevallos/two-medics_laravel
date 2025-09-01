@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import DialogDescription from '@/components/ui/dialog/DialogDescription.vue';
 import {
-    Form,
     FormControl,
     FormField,
     FormItem,
@@ -27,6 +26,7 @@ import TooltipProvider from '@/components/ui/tooltip/TooltipProvider.vue';
 import TooltipTrigger from '@/components/ui/tooltip/TooltipTrigger.vue';
 import { Course, CourseFile } from '@/types';
 import { Upload } from 'lucide-vue-next';
+import { useForm } from 'vee-validate';
 import { PropType, ref } from 'vue';
 
 const props = defineProps({
@@ -62,9 +62,14 @@ const formSchema = toTypedSchema(
     }),
 );
 
-const emit = defineEmits(['save:course']);
+const { isFieldDirty, handleSubmit } = useForm({
+    validationSchema: formSchema,
+    initialValues: {
+        nombre: props.course?.name ?? '',
+    },
+});
 
-function onSubmit(values: any) {
+const onSubmit = handleSubmit((values) => {
     const formData = new FormData();
 
     formData.append('name', values.nombre);
@@ -72,169 +77,156 @@ function onSubmit(values: any) {
     if (props.file) formData.append('file', `${props.file.id}`);
 
     emit('save:course', formData);
-}
+});
+
+const emit = defineEmits(['save:course']);
 </script>
 
 <template>
-    <Form
-        v-slot="{ handleSubmit }"
-        :validation-schema="formSchema"
-        :initial-values="{ nombre: course?.name ?? '' }"
-        :class="classes"
-    >
-        <Dialog
-            class="w-full max-w-[520px] min-w-[520px]"
-            v-model:open="isOpen"
-        >
-            <DialogTrigger class="w-full">
-                <slot />
-            </DialogTrigger>
+    <Dialog class="w-full max-w-[520px] min-w-[520px]" v-model:open="isOpen">
+        <DialogTrigger :class="classes">
+            <slot />
+        </DialogTrigger>
 
-            <DialogContent class="flex flex-col gap-6">
-                <DialogTitle>
-                    <h5 class="font-medium text-gray-600">
-                        {{
-                            file
-                                ? 'Actualizar material'
-                                : course
-                                  ? 'Agregar material'
-                                  : 'Completa la información del nuevo contenido'
-                        }}
-                    </h5>
-                </DialogTitle>
+        <DialogContent class="flex flex-col gap-6">
+            <DialogTitle>
+                <h5 class="font-medium text-gray-600">
+                    {{
+                        file
+                            ? 'Actualizar material'
+                            : course
+                              ? 'Agregar material'
+                              : 'Completa la información del nuevo contenido'
+                    }}
+                </h5>
+            </DialogTitle>
 
-                <DialogDescription />
+            <DialogDescription />
 
-                <form
-                    id="dialogForm"
-                    @submit="handleSubmit($event, onSubmit)"
-                    class="flex flex-col gap-6"
+            <form
+                id="dialogForm"
+                @submit="onSubmit"
+                class="flex flex-col gap-6"
+            >
+                <!-- Campo nombre -->
+                <FormField
+                    name="nombre"
+                    class="flex flex-col gap-2"
+                    v-slot="{ componentField }"
+                    :validate-on-blur="!isFieldDirty('nombre')"
                 >
-                    <!-- Campo nombre -->
-                    <FormField
-                        name="nombre"
-                        class="flex flex-col gap-2"
-                        v-slot="{ componentField }"
-                    >
-                        <FormItem>
-                            <FormLabel
-                                class="font-normal text-gray-400 data-[error=true]:text-gray-400"
-                            >
-                                Título del contenido
-                            </FormLabel>
+                    <FormItem>
+                        <FormLabel
+                            class="font-normal text-gray-400 data-[error=true]:text-gray-400"
+                        >
+                            Título del contenido
+                        </FormLabel>
 
-                            <FormControl>
-                                <Input
-                                    v-bind="{
-                                        ...componentField,
-                                        type: 'text',
-                                        disabled: course?.id,
-                                        placeholder: 'Ingresa un título',
-                                    }"
-                                />
-                            </FormControl>
+                        <FormControl>
+                            <Input
+                                v-bind="{
+                                    ...componentField,
+                                    type: 'text',
+                                    disabled: course?.id,
+                                    placeholder: 'Ingresa un título',
+                                }"
+                            />
+                        </FormControl>
 
-                            <FormMessage class="text-destructive" />
-                        </FormItem>
-                    </FormField>
+                        <FormMessage class="text-destructive" />
+                    </FormItem>
+                </FormField>
 
-                    <!-- Campo PDF -->
-                    <FormField
-                        v-slot="{ handleChange, value, errors }"
-                        name="pdf"
-                        class="flex flex-col gap-2"
-                    >
-                        <FormItem>
-                            <FormLabel
-                                class="font-normal text-gray-400 data-[error=true]:text-gray-400"
-                            >
-                                Archivo PDF
-                                <span v-if="file">
-                                    ({{ file.file_name }})
-                                </span>
-                            </FormLabel>
+                <!-- Campo PDF -->
+                <FormField
+                    v-slot="{ handleChange, value, errors }"
+                    name="pdf"
+                    class="flex flex-col gap-2"
+                    :validate-on-blur="!isFieldDirty('pdf')"
+                >
+                    <FormItem>
+                        <FormLabel
+                            class="font-normal text-gray-400 data-[error=true]:text-gray-400"
+                        >
+                            Archivo PDF
+                            <span v-if="file"> ({{ file.file_name }}) </span>
+                        </FormLabel>
 
+                        <div
+                            class="flex cursor-pointer items-center justify-center gap-4 rounded-[8px] border-2 border-dashed border-blue-300 bg-white px-6 py-4 text-gray-600 hover:bg-blue-100 hover:text-blue-500"
+                            :class="[
+                                { 'border-destructive': errors.length > 0 },
+                            ]"
+                            @click="fileInput?.el.click()"
+                        >
                             <div
-                                class="flex cursor-pointer items-center justify-center gap-4 rounded-[8px] border-2 border-dashed border-blue-300 bg-white px-6 py-4 text-gray-600 hover:bg-blue-100 hover:text-blue-500"
-                                :class="[
-                                    { 'border-destructive': errors.length > 0 },
-                                ]"
-                                @click="fileInput?.el.click()"
+                                class="flex size-9 items-center justify-center rounded-full bg-blue-500 p-2"
                             >
-                                <div
-                                    class="flex size-9 items-center justify-center rounded-full bg-blue-500 p-2"
-                                >
-                                    <Upload class="size-[14px] text-white" />
-                                </div>
-
-                                <TooltipProvider v-if="value">
-                                    <Tooltip>
-                                        <TooltipTrigger as-child>
-                                            <p
-                                                class="truncate"
-                                                style="width: 330px"
-                                            >
-                                                {{ value?.name }}
-                                            </p>
-                                        </TooltipTrigger>
-
-                                        <TooltipContent>
-                                            {{ value?.name }}
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-
-                                <p v-else>
-                                    Sube tu archivo aquí
-
-                                    <span class="text-gray-500">
-                                        (solo PDF)
-                                    </span>
-                                </p>
+                                <Upload class="size-[14px] text-white" />
                             </div>
 
-                            <FormControl style="display: none">
-                                <Input
-                                    ref="fileInput"
-                                    type="file"
-                                    accept="application/pdf"
-                                    @change="
-                                        (e: any) =>
-                                            handleChange(
-                                                e.target.files?.[0] ?? null,
-                                            )
-                                    "
-                                />
-                            </FormControl>
+                            <TooltipProvider v-if="value">
+                                <Tooltip>
+                                    <TooltipTrigger as-child>
+                                        <p
+                                            class="truncate"
+                                            style="width: 330px"
+                                        >
+                                            {{ value?.name }}
+                                        </p>
+                                    </TooltipTrigger>
 
-                            <FormMessage class="text-destructive" />
-                        </FormItem>
-                    </FormField>
-                </form>
+                                    <TooltipContent>
+                                        {{ value?.name }}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
 
-                <DialogFooter>
-                    <div class="flex w-full flex-col gap-4">
-                        <Separator
-                            orientation="horizontal"
-                            class="bg-blue-100"
-                        />
+                            <p v-else>
+                                Sube tu archivo aquí
 
-                        <div class="flex justify-end gap-2">
-                            <Button
-                                variant="outline"
-                                size="xl"
-                                @click="isOpen = false"
-                            >
-                                Cancelar
-                            </Button>
-
-                            <Button type="submit" form="dialogForm" size="xl">
-                                Guardar contenido
-                            </Button>
+                                <span class="text-gray-500"> (solo PDF) </span>
+                            </p>
                         </div>
+
+                        <FormControl style="display: none">
+                            <Input
+                                ref="fileInput"
+                                type="file"
+                                accept="application/pdf"
+                                @change="
+                                    (e: any) =>
+                                        handleChange(
+                                            e.target.files?.[0] ?? null,
+                                        )
+                                "
+                            />
+                        </FormControl>
+
+                        <FormMessage class="text-destructive" />
+                    </FormItem>
+                </FormField>
+            </form>
+
+            <DialogFooter>
+                <div class="flex w-full flex-col gap-4">
+                    <Separator orientation="horizontal" class="bg-blue-100" />
+
+                    <div class="flex justify-end gap-2">
+                        <Button
+                            variant="outline"
+                            size="xl"
+                            @click="isOpen = false"
+                        >
+                            Cancelar
+                        </Button>
+
+                        <Button type="submit" form="dialogForm" size="xl">
+                            Guardar contenido
+                        </Button>
                     </div>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    </Form>
+                </div>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 </template>

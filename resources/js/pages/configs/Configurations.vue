@@ -155,10 +155,11 @@ function onSubmitQuestionSection(values: any) {
             <Form
                 v-slot="{ handleSubmit }"
                 :validation-schema="imageSectionSchema"
+                class="min-w-[50%]"
             >
                 <form
                     @submit="handleSubmit($event, onSubmitImageSection)"
-                    class="flex min-w-[50%] flex-col justify-center gap-6 rounded-[16px] bg-white px-10 py-6"
+                    class="flex w-full flex-col justify-center gap-6 rounded-[16px] bg-white px-10 py-6"
                 >
                     <FormField
                         v-slot="{ handleChange, value, errors }"
@@ -299,7 +300,6 @@ function onSubmitQuestionSection(values: any) {
                                         class="pl-10"
                                         id="tiktok"
                                         placeholder="URL de perfil de Tiktok"
-                                        required
                                         type="url"
                                         v-bind="componentField"
                                     />
@@ -328,8 +328,7 @@ function onSubmitQuestionSection(values: any) {
                                         :tabindex="2"
                                         class="pl-10"
                                         id="telegram"
-                                        placeholder="Número de Telegram"
-                                        required
+                                        placeholder="Usuario de Telegram"
                                         type="tel"
                                         v-bind="componentField"
                                     />
@@ -359,7 +358,6 @@ function onSubmitQuestionSection(values: any) {
                                         class="pl-10"
                                         id="whatsapp"
                                         placeholder="Número de Whatsapp"
-                                        required
                                         type="tel"
                                         v-bind="componentField"
                                     />
@@ -389,7 +387,6 @@ function onSubmitQuestionSection(values: any) {
                                         class="pl-10"
                                         id="correo"
                                         placeholder="Correo electrónico"
-                                        required
                                         type="email"
                                         v-bind="componentField"
                                     />
@@ -452,7 +449,6 @@ function onSubmitQuestionSection(values: any) {
 
                                     <Textarea
                                         :tabindex="1"
-                                        class="pl-10"
                                         id="question"
                                         maxlength="175"
                                         placeholder="Escribe tu pregunta"
@@ -461,11 +457,11 @@ function onSubmitQuestionSection(values: any) {
                                         v-bind="componentField"
                                     />
 
-                                    <div
+                                    <!-- <div
                                         class="absolute bottom-[15%] left-4 flex h-12 items-center"
                                     >
                                         <Cctv class="size-4 text-blue-600" />
-                                    </div>
+                                    </div> -->
                                 </FormItem>
                             </FormField>
 
@@ -483,7 +479,6 @@ function onSubmitQuestionSection(values: any) {
 
                                     <Textarea
                                         :tabindex="2"
-                                        class="pl-10"
                                         id="answer"
                                         maxlength="52"
                                         placeholder="Escribe tu respuesta"
@@ -492,11 +487,11 @@ function onSubmitQuestionSection(values: any) {
                                         v-bind="componentField"
                                     />
 
-                                    <div
+                                    <!-- <div
                                         class="absolute bottom-[15%] left-4 flex h-12 items-center"
                                     >
                                         <Send class="size-4 text-blue-600" />
-                                    </div>
+                                    </div> -->
                                 </FormItem>
                             </FormField>
 
@@ -514,7 +509,6 @@ function onSubmitQuestionSection(values: any) {
 
                                     <Textarea
                                         :tabindex="2"
-                                        class="pl-10"
                                         id="explanation"
                                         maxlength="175"
                                         placeholder="Escribe tu explicación"
@@ -523,11 +517,11 @@ function onSubmitQuestionSection(values: any) {
                                         v-bind="componentField"
                                     />
 
-                                    <div
+                                    <!-- <div
                                         class="absolute bottom-[15%] left-4 flex h-12 items-center text-blue-600"
                                     >
                                         <MessageCircle class="size-4" />
-                                    </div>
+                                    </div> -->
                                 </FormItem>
                             </FormField>
                         </form>

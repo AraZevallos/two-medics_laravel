@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import UserInfo from '@/components/UserInfo.vue';
-import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
+import {
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 import type { User } from '@/types';
 import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Settings } from 'lucide-vue-next';
+import { LogOut } from 'lucide-vue-next';
 
 interface Props {
     user: User;
@@ -22,7 +26,7 @@ defineProps<Props>();
             <UserInfo :user="user" :show-email="true" />
         </div>
     </DropdownMenuLabel>
-    <DropdownMenuSeparator />
+    <!-- <DropdownMenuSeparator />
     <DropdownMenuGroup>
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full" :href="route('profile.edit')" prefetch as="button">
@@ -30,10 +34,16 @@ defineProps<Props>();
                 Settings
             </Link>
         </DropdownMenuItem>
-    </DropdownMenuGroup>
+    </DropdownMenuGroup> -->
     <DropdownMenuSeparator />
     <DropdownMenuItem :as-child="true">
-        <Link class="block w-full" method="post" :href="route('logout')" @click="handleLogout" as="button">
+        <Link
+            class="block w-full"
+            method="post"
+            :href="route('logout')"
+            @click="handleLogout"
+            as="button"
+        >
             <LogOut class="mr-2 size-4" />
             Log out
         </Link>

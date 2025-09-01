@@ -201,13 +201,13 @@ class CourseController extends Controller
             'value' => randomfnWithYear(),
         ]);
 
-        Code::create([
-            'course_id' => $courseId,
-            'is_enabled' => true,
-            'is_persistent' => false,
-            'expiration_date' => null,
-            'value' => randomfnWithYear(),
-        ]);
+        // Code::create([
+        //     'course_id' => $courseId,
+        //     'is_enabled' => true,
+        //     'is_persistent' => false,
+        //     'expiration_date' => null,
+        //     'value' => randomfnWithYear(),
+        // ]);
 
         $selectedParent = null;
         $selectedCourse = null;
