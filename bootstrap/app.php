@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        $environment = config('app.env');
+        $environment = env('APP_ENV');
         if ($environment === 'production') {
             // trust proxy
             $middleware->web()->trustProxies(
