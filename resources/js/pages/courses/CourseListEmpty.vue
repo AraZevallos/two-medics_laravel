@@ -5,6 +5,10 @@ import CardContent from '@/components/ui/card/CardContent.vue';
 import { Info, Link } from 'lucide-vue-next';
 import { PropType } from 'vue';
 
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
 defineProps({
     summary: {
         type: Object as PropType<{
@@ -17,7 +21,7 @@ defineProps({
 });
 
 function openLink() {
-    window.open('https://google.com', '_blank');
+    window.open(String((page.props as any).app.client_url), '_blank');
 }
 </script>
 
