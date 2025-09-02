@@ -67,10 +67,7 @@ class CursoController extends Controller
         $response = response()->download($zipPath)->deleteFileAfterSend(true);
 
         // Si el código NO es persistente → eliminarlo después de enviar
-        if (!$codigoModel->persistente) {
-            Log::info('este se elimina', ['codigo' => $codigoModel]);
-            // $codigoModel->delete();
-        }
+        if (!$codigoModel->persistente) $codigoModel->delete();
 
         return $response;
     }
